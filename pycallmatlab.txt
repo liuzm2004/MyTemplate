@@ -1,0 +1,15 @@
+首先在建一个m文件，名为test.m,为一个MATLAB函数，其内容如下：
+function test(M,N)
+x = M:N;
+y = [sin(x)];
+plot(x,y)
+在使用python调用此函数之前，需要为python安装pywin32模块，此模块可从以下地址下载：
+http://sourceforge.net/projects/pywin32/files/
+下载时注意你的python版本。
+接下来在调用test函数
+from win32com.client import Dispatch
+h = Dispatch("Matlab.application")#启动MATLAB自动化服务器
+h.execute("test(0.0,512.0)")
+此时MALTAB会打开MATLAB Command Window,而且python的结果很可能为如下错误提示
+“??? Undefined function or method 'test' for input arguments of type 'double'.”
+这是因为路径的原因造成的。把你的.m文件和.py放在同一路径下，在MATLAB Command Window中cd到此路径，再执行，就会成功调用test函数，绘出正确的图形。
